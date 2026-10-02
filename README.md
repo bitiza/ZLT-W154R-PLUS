@@ -23,8 +23,13 @@ Community-maintained technical documentation for the **TOZED ZLT W154R PLUS** in
 
 - [Hardware, storage, network interfaces](docs/hardware.md)
 - [Read-only inspection and observed services](docs/inspection.md)
+- [Read-only MTD backup findings and restore limitations](docs/backup.md)
 - [W154R PLUS ↔ X17U topology and responsibility](docs/topology.md)
 - [Sources, evidence classification and open questions](docs/sources.md)
+
+## New backup findings (2026-10-02)
+
+All twelve MTD partitions were captured locally through read-only devices, totaling **115 MiB**; this does not include NAND OOB metadata and is not a validated restore image. **The nominal second firmware bank (`mtd5`–`mtd8`) was fully erased** on the inspected unit. Images and identifying data are intentionally excluded. See [backup notes](docs/backup.md) and [hardware inventory](docs/hardware.md).
 
 ## X17U product-page reconciliation
 
