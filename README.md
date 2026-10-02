@@ -2,14 +2,12 @@
 
 Community-maintained technical documentation for the **TOZED ZLT W154R PLUS** indoor Wi-Fi router, as used alongside a **ZLT X17U** outdoor cellular unit in one inspected installation.
 
-> **Scope:** The W154R PLUS and X17U are different devices. Hardware and software values below come from read-only inspection of **one W154R PLUS on 2026-10-02**, unless separately attributed. They may vary with hardware revision, market and firmware.
-
 ## Observed W154R PLUS inventory
 
 | Property | Observation | Evidence |
 | --- | --- | --- |
-| Reported model | `ZLT W154R PLUS` | `mdlcfg` |
-| Configuration version | `W154RPLUS-NG0002_1.0.05` | `mdlcfg` |
+| Reported model | `ZLT W154R PLUS` |
+| Configuration version | `W154RPLUS-NG0002_1.0.05` |
 | Platform | Realtek RTL8197F; MIPS 24Kc V8.5, one logical processor | `/proc/cpuinfo` |
 | Linux kernel | 4.4.176 (build dated 2026-02-28) | `uname`, `/proc/version` |
 | SDK / BusyBox | Realtek SDK v3.4.14-r / BusyBox 1.30.1 | `/etc/version`, `busybox` |
@@ -17,7 +15,6 @@ Community-maintained technical documentation for the **TOZED ZLT W154R PLUS** in
 | Storage | 115 MiB total across named MTD partitions (not a measured flash-chip capacity) | `/proc/mtd` |
 | Inspected role | Indoor Ethernet bridge / Wi-Fi access point | Network inspection |
 
-**Do not treat the X17U's 5G modem chipset, cellular bands, or 2.5 Gbps outdoor Ethernet specification as specifications for this indoor router.**
 
 ## Documents
 
