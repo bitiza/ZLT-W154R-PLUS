@@ -25,7 +25,7 @@ console=ttyS0,38400 root=/dev/mtdblock3 root2=/dev/mtdblock8
 
 ## MTD layout
 
-Sizes below are from `/proc/mtd` and sum to **115 MiB of named partitions**; this is not proof of total raw flash capacity. The primary rootfs was mounted read-only as SquashFS. Backup partitions exist, but failover and firmware-update behavior were not tested.
+Sizes below are from `/proc/mtd` and sum to **115 MiB of named partitions**; this is not proof of total raw flash capacity. The primary rootfs was mounted read-only as SquashFS. A subsequent full read-only capture showed **`mtd5`–`mtd8` entirely erased (`0xff`)** on this unit, so the nominal secondary firmware bank contained no usable image at the time of capture. Failover and firmware-update behavior were not tested. See [backup notes](backup.md).
 
 | Partition | Size | Name | Observed mount |
 | --- | ---: | --- | --- |
