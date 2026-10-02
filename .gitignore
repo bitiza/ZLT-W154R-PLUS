@@ -1,0 +1,13 @@
+# Sensitive local research / credentials and per-device state
+private/
+captures/
+firmware/
+*.bin
+*.img
+*.pcap
+*.pcapng
+*.tar
+*.tar.gz
+*.zip
+.DS_Store
+__pycache__/
