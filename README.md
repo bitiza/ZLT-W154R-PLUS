@@ -12,7 +12,7 @@ Community-maintained technical documentation for the **TOZED ZLT W154R PLUS** in
 | Linux kernel | 4.4.176 (build dated 2026-02-28) | `uname`, `/proc/version` |
 | SDK / BusyBox | Realtek SDK v3.4.14-r / BusyBox 1.30.1 | `/etc/version`, `busybox` |
 | Linux-reported memory | 123,692 KiB | `/proc/meminfo` |
-| Storage | 115 MiB total across named MTD partitions (not a measured flash-chip capacity) | `/proc/mtd` |
+| NAND flash | 128 MiB reported; 115 MiB across named MTD partitions | `/proc/nandinfo`, `/proc/mtd` |
 | Inspected role | Indoor Ethernet bridge / Wi-Fi access point | Network inspection |
 
 
@@ -21,12 +21,18 @@ Community-maintained technical documentation for the **TOZED ZLT W154R PLUS** in
 - [Hardware, storage, network interfaces](docs/hardware.md)
 - [Read-only inspection and observed services](docs/inspection.md)
 - [Read-only MTD backup findings and restore limitations](docs/backup.md)
+- [Ethernet port mapping](docs/ethernet.md)
+- [NAND geometry and evidence-based recovery candidates](docs/flash-recovery.md)
 - [W154R PLUS ↔ X17U topology and responsibility](docs/topology.md)
 - [Sources, evidence classification and open questions](docs/sources.md)
 
 ## New backup findings (2026-10-02)
 
 All twelve MTD partitions were captured locally through read-only devices, totaling **115 MiB**; this does not include NAND OOB metadata and is not a validated restore image. **The nominal second firmware bank (`mtd5`–`mtd8`) was fully erased** on the inspected unit. Images and identifying data are intentionally excluded. See [backup notes](docs/backup.md) and [hardware inventory](docs/hardware.md).
+
+## Ethernet and recovery research
+
+Vendor scripts map WAN to `eth1`, LAN1 to `eth0`, LAN2 to `eth2`, and LAN3 to `eth4`. These are **firmware-reported roles**, not a chassis-jack mapping verified by moving cables. A live NAND inventory reports 128 MiB total with 115 MiB in named partitions; the additional 13 MiB has an unknown purpose. Extracted bootloader strings mention TFTP and XMODEM, but neither recovery route has been tested. See [Ethernet](docs/ethernet.md) and [flash recovery](docs/flash-recovery.md).
 
 ## X17U product-page reconciliation
 
