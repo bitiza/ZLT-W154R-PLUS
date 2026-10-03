@@ -16,6 +16,10 @@ Community-maintained technical documentation for the **TOZED ZLT W154R PLUS** in
 | Inspected role | Indoor Ethernet bridge / Wi-Fi access point | Network inspection |
 
 
+## Latest firmware status (2026-10-03)
+
+Latest local research records report a clean **v4 modified SquashFS** installed on both bank 1 (`mtd3`) and bank 2 (`mtd8`), with an authenticated management shell and UART login verified following a reboot. The previous bootable **v3** was found to corrupt a vendor ELF and XZ padding; successful boot alone did not prove file integrity. [Read checksum and v4 audit](docs/rootfs-checksum.md). Do not publish the embedded device-specific passwords or credentials.
+
 ## Verified milestone — custom bank 2 boot (2026-10-03)
 
 **Confirmed on the live device:** `/proc/bootbank` reports `2`, the root mount is `31:8` (the secondary `mtdblock8`), and the added `/usr/bin/busybox-full` executes as BusyBox 1.36.1. An earlier firmware bank 2 boot failed twice; the third attempt booted with reported SquashFS header/checksum corrections. The Realtek-specific checksum explanation comes from a local agent's loader disassembly and is not yet independently audited. [See the evidence](docs/boot-success.md).
@@ -28,6 +32,7 @@ Community-maintained technical documentation for the **TOZED ZLT W154R PLUS** in
 - [Read-only inspection and observed services](docs/inspection.md)
 - [Read-only MTD backup findings and restore limitations](docs/backup.md)
 - [Successful bank 2 rootfs boot and checksum analysis](docs/boot-success.md)
+- [Checksum analysis, v3 corruption and corrected v4 integrity](docs/rootfs-checksum.md)
 - [Flash attempts and observed fallback](docs/flash-attempt.md)
 - [Rootfs modification assessment](docs/rootfs-modification.md)
 - [Ethernet port mapping](docs/ethernet.md)
