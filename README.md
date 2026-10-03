@@ -16,11 +16,20 @@ Community-maintained technical documentation for the **TOZED ZLT W154R PLUS** in
 | Inspected role | Indoor Ethernet bridge / Wi-Fi access point | Network inspection |
 
 
+## Verified milestone — custom bank 2 boot (2026-10-03)
+
+**Confirmed on the live device:** `/proc/bootbank` reports `2`, the root mount is `31:8` (the secondary `mtdblock8`), and the added `/usr/bin/busybox-full` executes as BusyBox 1.36.1. An earlier firmware bank 2 boot failed twice; the third attempt booted with reported SquashFS header/checksum corrections. The Realtek-specific checksum explanation comes from a local agent's loader disassembly and is not yet independently audited. [See the evidence](docs/boot-success.md).
+
+**Recovery also observed:** Removing the secondary rootfs magic caused the bootloader to fall back to primary bank 1 in this specific failure condition. This does not establish a general-purpose rollback or reset-button procedure.
+
 ## Documents
 
 - [Hardware, storage, network interfaces](docs/hardware.md)
 - [Read-only inspection and observed services](docs/inspection.md)
 - [Read-only MTD backup findings and restore limitations](docs/backup.md)
+- [Successful bank 2 rootfs boot and checksum analysis](docs/boot-success.md)
+- [Flash attempts and observed fallback](docs/flash-attempt.md)
+- [Rootfs modification assessment](docs/rootfs-modification.md)
 - [Ethernet port mapping](docs/ethernet.md)
 - [NAND geometry and evidence-based recovery candidates](docs/flash-recovery.md)
 - [W154R PLUS ↔ X17U topology and responsibility](docs/topology.md)
@@ -28,7 +37,7 @@ Community-maintained technical documentation for the **TOZED ZLT W154R PLUS** in
 
 ## New backup findings (2026-10-02)
 
-All twelve MTD partitions were captured locally through read-only devices, totaling **115 MiB**; this does not include NAND OOB metadata and is not a validated restore image. **The nominal second firmware bank (`mtd5`–`mtd8`) was fully erased** on the inspected unit. Images and identifying data are intentionally excluded. See [backup notes](docs/backup.md) and [hardware inventory](docs/hardware.md).
+All twelve MTD partitions were captured locally through read-only devices, totaling **115 MiB**; this does not include NAND OOB metadata and is not a validated restore image. **The nominal second firmware bank (`mtd5`–`mtd8`) was fully erased at the initial backup**; `mtd7` and `mtd8` were subsequently programmed and bank 2 was successfully booted. Images and identifying data are intentionally excluded. See [backup notes](docs/backup.md) and [hardware inventory](docs/hardware.md).
 
 ## Ethernet and recovery research
 
@@ -40,6 +49,6 @@ The [ZLT WiFi product listing for the X17U](https://www.zltwifi.com/product/toze
 
 ## Publication and safety
 
-This public repository deliberately excludes the supplied `private/` notes, raw configuration, firmware images, serial numbers, IMEIs, MAC addresses, device-specific IPs, Wi-Fi credentials and passwords. Do not publish full `mdlcfg -e` output or files from `/config` without sanitizing them. The inspection commands are read-only; run them only on devices you administer. One firmware image may expose management services that other revisions do not.
+This public repository deliberately excludes the supplied `private/` notes, raw configuration, firmware images, serial numbers, IMEIs, MAC addresses, device-specific IPs, Wi-Fi credentials and passwords. Do not publish full `mdlcfg -e` output or files from `/config` without sanitizing them. The documented inventory commands are read-only, but the research history includes explicitly attributed destructive flashing/erasing experiments; do not treat them as safe procedures. Work only on equipment you administer. One firmware image may expose management services that other revisions do not.
 
 Independent community project; not affiliated with or endorsed by TOZED or the website hosting the X17U listing.
