@@ -2,6 +2,9 @@
 
 **Dates:** 2026-10-02 through 2026-10-03.
 
+
+> **Update, 2026-10-03:** A subsequent audit found corruption in the previously bootable v3 checksum-patched image, including altered bytes in a vendor executable and invalid XZ padding. The user's latest local records report a **clean rebuild (v4) installed on both rootfs banks**, with functioning access after reboot. This is a reported current state; the public repository does not contain private firmware images. See [checksum and v4 integrity findings](rootfs-checksum.md). Credentials and device identifiers are intentionally omitted.
+
 ## Source hierarchy
 
 This chronology combines a supplied local agent's `IDU-FLASH-NOTES.md` with live owner-provided shell output reproduced in [boot success](boot-success.md). Reported actions are attributed as such; the successful mount and BusyBox execution are directly documented.
