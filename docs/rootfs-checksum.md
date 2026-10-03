@@ -49,6 +49,17 @@ The supplied build report describes rebuilding from a clean tree with original f
 
 The supplied audit states successful extraction of **1,690 files, 211 symlinks and 349 device nodes**, and a full comparison of 2,350 filesystem paths. Those are reported test results; this public repository does not carry the private images needed to rerun them.
 
+## Subsequent verified on-device v4 results
+
+The owner's later records include full readback SHA-256 checks and boot tests, beyond the earlier reported installation:
+
+| Partition | Complete partition SHA-256 |
+| --- | --- |
+| Bank 1 `mtd3` v4 rootfs plus erased tail | `4f4bf993dcea5339500904f11b7cc34d54bd210b445567d6339aaeb8e118221e` |
+| Bank 2 `mtd8` v4 rootfs plus erased tail | `83bc02fd5cc55de56f77152099a78bac0450746528d61ac2c4a1008aed5e9db1` |
+
+A complete bank-1 runtime audit read all **1,690 firmware regular files** and matched the clean v4 extraction. The subsequent [stock-updater package trial](idu-package-trial.md) then rebooted into bank 2 with `bootbank=2`, root device `31:8`, and all **1,690 files** matching. That trial included a changed bank-2 kernel marker `0x80000004`; it demonstrates a working **direct vendor update**, not an HTTP web-upload test. This evidence strengthens the boot validation but does not establish that unrelated vendor image layouts would work.
+
 ## NAND streaming caveat
 
 Raw NAND character writes require writes aligned to the 2 KiB NAND page size. Direct `nc | dd of=/dev/mtdN` pipelines can yield short reads and unaligned writes, producing `nand_do_write_ops: attempt to write non page aligned data`. Earlier aligned writes may have succeeded even if a later write was rejected. Prefer a verified local staging file and complete readback checks rather than streaming arbitrary socket chunks into NAND. Do not rewrite the active rootfs.
