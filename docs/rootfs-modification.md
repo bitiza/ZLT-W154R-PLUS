@@ -1,6 +1,9 @@
 # W154R PLUS rootfs modification: validated result and limitations
 
-**Status as of 2026-10-03:** A modified SquashFS containing an extra static MIPSEL BusyBox 1.36.1 binary **successfully booted on bank 2**. Read [boot success and supporting output](boot-success.md) before attempting similar work.
+**Status as of 2026-10-03:** A modified SquashFS containing an extra static MIPSEL BusyBox 1.36.1 binary **successfully booted on bank 2**. The later v3 integrity audit found damaged vendor file contents even though the device booted; the supplied latest records report a corrected, clean v4 rebuild on both banks. Read [boot success and supporting output](boot-success.md) before attempting similar work.
+
+
+> **Update, 2026-10-03:** A subsequent audit found corruption in the previously bootable v3 checksum-patched image, including altered bytes in a vendor executable and invalid XZ padding. The user's latest local records report a **clean rebuild (v4) installed on both rootfs banks**, with functioning access after reboot. This is a reported current state; the public repository does not contain private firmware images. See [checksum and v4 integrity findings](rootfs-checksum.md). Credentials and device identifiers are intentionally omitted.
 
 ## Observed baseline
 
