@@ -1,5 +1,8 @@
 # Verified modified-rootfs boot — 2026-10-03
 
+
+> **Update, 2026-10-03:** A subsequent audit found corruption in the previously bootable v3 checksum-patched image, including altered bytes in a vendor executable and invalid XZ padding. The user's latest local records report a **clean rebuild (v4) installed on both rootfs banks**, with functioning access after reboot. This is a reported current state; the public repository does not contain private firmware images. See [checksum and v4 integrity findings](rootfs-checksum.md). Credentials and device identifiers are intentionally omitted.
+
 ## Scope and evidence
 
 An owner-operated W154R PLUS running the original Realtek Linux **4.4.176** kernel successfully booted **bank 2**, mounting a modified SquashFS filesystem that adds `/usr/bin/busybox-full`. This document records **observed terminal output** and separates it from the separate agent's bootloader reverse-engineering conclusions.
