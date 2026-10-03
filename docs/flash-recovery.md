@@ -44,3 +44,7 @@ Related RTL8197F hardware may have bootloader TFTP capabilities, but addresses a
 - On the corrected third attempt, a live shell reported bootbank `2`; kernel `dmesg` showed `VFS: Mounted root (squashfs filesystem) readonly on device 31:8.` The additional BusyBox 1.36.1 was present and executable.
 - A local agent's analysis proposes a Realtek-loader check using bytes at SquashFS offset `0x08` to derive a checksum range, plus a zero 16-bit word sum. The exact disassembly has not been independently reviewed. Details: [boot success](boot-success.md).
 - Neither a model-specific TFTP `AUTOBURN` write procedure nor factory-reset bank selection is verified here. The NAND address and image-framing requirements should be established before any additional writes.
+
+## Later validated vendor installation (2026-10-03)
+
+The initial recovery-route uncertainties above describe the original baseline. A subsequent **direct stock-updater trial** accepted a correctly framed vendor package when sufficient temporary extraction space was provided. The secondary kernel marker advanced to `0x80000004`, bank 1 partitions were preserved, and after reboot `mtdblock8` mounted and all 1,690 files passed SHA-256 verification. See [the monitored updater trial](idu-package-trial.md) and [container framing](packtool.md). The bootloader's TFTP and XMODEM recovery write paths remain unverified, as does browser-based updating.
