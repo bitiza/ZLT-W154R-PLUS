@@ -1,5 +1,7 @@
 # Read-only inspection of the W154R PLUS
 
+> **Current-configuration warning (2026-10-03):** Later user-supplied records report modified **v4** rootfs images on both banks and an authenticated, startup-managed Telnet service on 4444. The historical unauthenticated access described below applies to the earlier inspected state, **not** to the reported v4 deployment. Authentication details and unique addresses are intentionally unpublished. See [v4 checksum and integrity notes](rootfs-checksum.md).
+
 Only use these commands on equipment you own or administer. Replace placeholders with the address and interface of your own device. IPv6 link-local connections need an interface scope.
 
 ```sh
