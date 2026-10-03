@@ -20,9 +20,13 @@ Community-maintained technical documentation for the **TOZED ZLT W154R PLUS** in
 
 Latest local research records report a clean **v4 modified SquashFS** installed on both bank 1 (`mtd3`) and bank 2 (`mtd8`), with an authenticated management shell and UART login verified following a reboot. The previous bootable **v3** was found to corrupt a vendor ELF and XZ padding; successful boot alone did not prove file integrity. [Read checksum and v4 audit](docs/rootfs-checksum.md). Do not publish the embedded device-specific passwords or credentials.
 
+## Verified vendor-package milestone — 2026-10-03
+
+The **stock W154R PLUS `tzupdate` updater accepted a locally supplied vendor-format package** carrying the clean v4 rootfs and factory kernel. The first run returned extraction error 114 with insufficient `/data/web_upload` space; the unchanged command returned 0 using temporary RAM staging. Complete partition readback preserved bank 1 and showed the bank-2 kernel marker updated to `0x80000004`. After reboot the router mounted `31:8` and **all 1,690 firmware regular files matched** the clean v4 reference by SHA-256. This is a **direct stock-updater** trial; web GUI upload is **not tested**. See [monitored trial](docs/idu-package-trial.md).
+
 ## Verified milestone — custom bank 2 boot (2026-10-03)
 
-**Confirmed on the live device:** `/proc/bootbank` reports `2`, the root mount is `31:8` (the secondary `mtdblock8`), and the added `/usr/bin/busybox-full` executes as BusyBox 1.36.1. An earlier firmware bank 2 boot failed twice; the third attempt booted with reported SquashFS header/checksum corrections. The Realtek-specific checksum explanation comes from a local agent's loader disassembly and is not yet independently audited. [See the evidence](docs/boot-success.md).
+**Confirmed on the live device:** `/proc/bootbank` reports `2`, the root mount is `31:8` (the secondary `mtdblock8`), and the added `/usr/bin/busybox-full` executes as BusyBox 1.36.1. An earlier firmware bank 2 boot failed twice; the third attempt booted with reported SquashFS header/checksum corrections. The Realtek-specific checksum explanation was subsequently cross-checked against stage-2 loader disassembly, and the corrected full-image checksum window was successfully boot-tested on both banks. [See the evidence](docs/boot-success.md).
 
 **Recovery also observed:** Removing the secondary rootfs magic caused the bootloader to fall back to primary bank 1 in this specific failure condition. This does not establish a general-purpose rollback or reset-button procedure.
 
@@ -33,6 +37,10 @@ Latest local research records report a clean **v4 modified SquashFS** installed 
 - [Read-only MTD backup findings and restore limitations](docs/backup.md)
 - [Successful bank 2 rootfs boot and checksum analysis](docs/boot-success.md)
 - [Checksum analysis, v3 corruption and corrected v4 integrity](docs/rootfs-checksum.md)
+- [packtoolpro container format and tested record framing](docs/packtool.md)
+- [Successful stock-updater package trial (bank 2)](docs/idu-package-trial.md)
+- [Web upload: inspected, not exercised](docs/web-upgrade.md)
+- [X17U ODU comparison: signed OTA, dm-verity and updater stages](docs/odu-packtool.md)
 - [Flash attempts and observed fallback](docs/flash-attempt.md)
 - [Rootfs modification assessment](docs/rootfs-modification.md)
 - [Ethernet port mapping](docs/ethernet.md)
