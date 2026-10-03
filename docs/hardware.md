@@ -15,7 +15,7 @@ All values in this document were obtained by read-only inspection of **one ZLT W
 | Reported memory | 123,692 KiB | `/proc/meminfo` |
 | Swap | None observed | `/proc/meminfo` |
 
-The CPU's BogoMIPS value does **not** establish actual operating frequency. Board-level radio chipset identity, antenna count, channel widths, link-rate ceilings and flash-chip capacity were not established.
+The CPU's BogoMIPS value does **not** establish actual operating frequency. Board-level radio chipset identity, antenna count, channel widths and radio link-rate ceilings were not established. A later `/proc/nandinfo` reading reported **128 MiB NAND** (128 KiB erase blocks; 2 KiB pages; 128-byte OOB). See [flash recovery](flash-recovery.md).
 
 Observed kernel command line:
 
@@ -25,7 +25,7 @@ console=ttyS0,38400 root=/dev/mtdblock3 root2=/dev/mtdblock8
 
 ## MTD layout
 
-Sizes below are from `/proc/mtd` and sum to **115 MiB of named partitions**; this is not proof of total raw flash capacity. The primary rootfs was mounted read-only as SquashFS. A subsequent full read-only capture showed **`mtd5`–`mtd8` entirely erased (`0xff`)** on this unit, so the nominal secondary firmware bank contained no usable image at the time of capture. Failover and firmware-update behavior were not tested. See [backup notes](backup.md).
+Sizes below are from `/proc/mtd` and sum to **115 MiB of named partitions** on a reported **128 MiB NAND** chip. The use of the remaining 13 MiB is not established. The primary rootfs was mounted read-only as SquashFS. A subsequent full read-only capture showed **`mtd5`–`mtd8` entirely erased (`0xff`)** on this unit, so the nominal secondary firmware bank contained no usable image at the time of capture. **Subsequent events (2026-10-03):** Secondary kernel/rootfs partitions `mtd7` and `mtd8` were programmed; after initial failures, bank 2 successfully booted a modified rootfs. A particular missing-secondary-rootfs-signature condition triggered observed fallback to bank 1. These findings do not prove fallback for every failure. See [boot evidence](boot-success.md). See [backup notes](backup.md).
 
 | Partition | Size | Name | Observed mount |
 | --- | ---: | --- | --- |
@@ -46,7 +46,7 @@ Sizes below are from `/proc/mtd` and sum to **115 MiB of named partitions**; thi
 
 ## Network and Wi-Fi
 
-At the time of inspection, `br0` contained `eth0`–`eth4`, `wlan0` and `wlan1`. `eth1` carried upstream traffic toward the outdoor unit and `wlan1` carried client traffic in that installation. Interface names do not prove physical port mapping.
+At the time of inspection, `br0` contained `eth0`–`eth4`, `wlan0` and `wlan1`. `eth1` carried upstream traffic toward the outdoor unit and `wlan1` carried client traffic in that installation. Vendor scripts map WAN to `eth1`, LAN1 to `eth0`, LAN2 to `eth2`, and LAN3 to `eth4`; these firmware labels have not been checked against the physical jack order. See [Ethernet mapping](ethernet.md).
 
 Loaded modules included `rtl8192cd` and `rtk_wifi6`. `hostapd` ran for `wlan0` and `wlan1`. `iwlist` showed `wlan0` at 5 GHz channel 36 and `wlan1` at 2.4 GHz channel 1. These are **runtime observations**, not a complete regulatory-domain or product radio specification. Additional virtual `wlan1-vap*` interfaces existed but were not bridge members at inspection.
 
