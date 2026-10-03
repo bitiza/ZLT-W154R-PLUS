@@ -1,6 +1,6 @@
 # Flash layout and recovery evidence
 
-Read-only inspection of one W154R PLUS running `W154RPLUS-NG0002_1.0.05`, plus offline analysis of its private backup. No flashing, reboot, bootloader entry, or recovery test was performed.
+Initial read-only inspection of one W154R PLUS running `W154RPLUS-NG0002_1.0.05`, followed by owner-operated bank 2 programming, UART recovery, and **successful modified-rootfs boot on 2026-10-03**. The partition-content table is a snapshot of the **original backup**, not the latest live bank 2 content. See [flash attempts](flash-attempt.md) and [boot success](boot-success.md).
 
 ## NAND geometry
 
@@ -8,7 +8,7 @@ Read-only inspection of one W154R PLUS running `W154RPLUS-NG0002_1.0.05`, plus o
 
 The partition table accounts for **115 MiB**, leaving **13 MiB outside the named MTD partitions**. Its purpose has not been established. The offsets below are *nominal cumulative offsets* derived from partition order and sizes; the actual NAND driver/bootloader physical mapping and bad-block handling have not been independently verified.
 
-| MTD | Name | Nominal start | Nominal end (exclusive) | Size | Current contents / use |
+| MTD | Name | Nominal start | Nominal end (exclusive) | Size | Contents / use at original backup |
 | --- | --- | ---: | ---: | ---: | --- |
 | 0 | `boot` | `0x0000000` | `0x0200000` | 2 MiB | Boot image; embedded compressed Realtek loader |
 | 1 | `setting` | `0x0200000` | `0x0500000` | 3 MiB | Mounted `/hw_setting` (YAFFS2); hardware data |
@@ -23,7 +23,7 @@ The partition table accounts for **115 MiB**, leaving **13 MiB outside the named
 | 10 | `config_backup` | `0x4900000` | `0x4e00000` | 5 MiB | Mounted `/config_backup` (YAFFS2) |
 | 11 | `data` | `0x4e00000` | `0x7300000` | 37 MiB | Mounted `/data` (YAFFS2) |
 
-The live `/proc/bootbank` value was `1`. The kernel command line selected `/dev/mtdblock3` as `root` and listed `/dev/mtdblock8` as `root2`; `/` was mounted from the primary rootfs. All bytes of `mtd5`–`mtd8` in the backup were `0xff`, so there was no usable second image at capture time. `config_backup` is a separate configuration partition and should not be mistaken for a firmware bank.
+The **initial backup-time** `/proc/bootbank` value was `1`. The kernel command line listed `/dev/mtdblock3` as `root` and `/dev/mtdblock8` as `root2`; `/` initially mounted from the primary rootfs. **Later bank 2 evidence explicitly confirms actual root device `31:8` (`mtdblock8`)**. All bytes of `mtd5`–`mtd8` in the backup were `0xff`, so there was no usable second image at capture time. `config_backup` is a separate configuration partition and should not be mistaken for a firmware bank.
 
 ## Recovery routes indicated by evidence
 
@@ -34,6 +34,13 @@ The live `/proc/bootbank` value was `1`. The kernel command line selected `/dev/
 | Realtek bootloader serial transfer | The same loader contains `XMOD`/XMODEM strings. The Linux command line and getty use `ttyS0,38400`. | Candidate path; UART header, voltage, pinout, bootloader baud rate, and transfer behavior untested. |
 | External NAND programming | The backup contains all named MTD data areas. | Hardware recovery possibility only; no procedure validated. The backup excludes NAND OOB data and is not a proven directly flashable image. |
 
-The loader also contains checksum and rootfs/signature error strings. Their presence does not establish which W154R PLUS firmware package will pass validation. Because the second bank is empty, automatic fallback should not be assumed.
+The loader also contains checksum and rootfs/signature error strings. Their presence does not establish which W154R PLUS firmware package will pass validation. The second bank was empty **at backup time** but has since been programmed. Fallback to bank 1 was demonstrated **when the secondary rootfs signature was deliberately invalidated**; it is not a guarantee of rollback for other failures.
 
 Related RTL8197F hardware may have bootloader TFTP capabilities, but addresses and commands from another model must not be copied to this unit without independent verification. No model-specific recovery procedure has yet been established.
+
+## Observed 2026-10-03 results
+
+- A bootloader UART trace showed selection of bank 2 and later, after invalidating the secondary rootfs signature, a scan failure followed by a fallback to bank 1.
+- On the corrected third attempt, a live shell reported bootbank `2`; kernel `dmesg` showed `VFS: Mounted root (squashfs filesystem) readonly on device 31:8.` The additional BusyBox 1.36.1 was present and executable.
+- A local agent's analysis proposes a Realtek-loader check using bytes at SquashFS offset `0x08` to derive a checksum range, plus a zero 16-bit word sum. The exact disassembly has not been independently reviewed. Details: [boot success](boot-success.md).
+- Neither a model-specific TFTP `AUTOBURN` write procedure nor factory-reset bank selection is verified here. The NAND address and image-framing requirements should be established before any additional writes.
